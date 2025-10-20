@@ -12,9 +12,10 @@ const ProtectRoute = ({
     if(!isAuthed){
         return <Navigate to={redirect} replace state={{from:location}}/>
     }
-    return (
-        <div>ProtectRoute</div>
-    )
+    if(requiredRole && user?.role !==requiredRole){
+        return <Navigate to='/' replace/>
+    }
+    return <Outlet/>
 }
 
 export default ProtectRoute
