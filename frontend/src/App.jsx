@@ -1,7 +1,7 @@
 
 import './App.scss'
 import { useState, useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate,useLocation } from 'react-router-dom'
 import AuthPanel from './components/AuthPanel'
 import Landing from './pages/Landing'
 import Header from './components/Header'
@@ -21,7 +21,7 @@ function App() {
     return raw ? JSON.parse(raw) : null
   })
 
-
+const location = useLocation()
 
   const [token, setToken] = useState(() => localStorage.getItem('token'))
   const [me, setMe] = useState(null)
