@@ -18,7 +18,7 @@ const AuthModal = ({
   const [form, setForm] = useState({
     email: '',
     password: '',
-    displayName: ''
+    isplayName: ''
   })
 
   const [loading, setLoading] = useState(false)
@@ -130,7 +130,7 @@ const AuthModal = ({
         <div className="am-tabs">
           <button
             type='button'
-            className={mode === 'login' ? 'on' : ''}
+            className={`btn ${mode === 'login' ? 'on' : ''}`}
             onClick={() => setMode('login')}
           >
             로그인
@@ -138,7 +138,7 @@ const AuthModal = ({
           <button
             type='button'
             onClick={() => setMode('register')}
-            className={mode === 'register' ? 'on' : ''}
+            className={`btn ${mode === 'register' ? 'on' : ''}`}
           >
             회원가입
           </button>
@@ -194,7 +194,7 @@ const AuthModal = ({
           </button>
         </form>
 
-        <button type='button' onClick={onClose} className='am-close' aria-label='닫기'>X</button>
+        <button type='button' onClick={onClose} className='am-close btn' aria-label='닫기'>X</button>
       </div>
 
     </div>

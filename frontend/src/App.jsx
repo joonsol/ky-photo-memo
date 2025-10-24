@@ -104,7 +104,7 @@ const location = useLocation()
             <ProtectRoute
               user={user}
               isAuthed={isAuthed}
-              redirect='/admin/login'
+              redirect='/'
             />
           }
         >
