@@ -10,19 +10,18 @@ const UserDashboard = () => {
 
   const { items, loading, load, add } = usePosts()
 
-  const handleUploaded=async({title, content, file})=>{
+const handleUploaded = async ({ title, content, file }) => {
+  try {
+    console.log("[UPLOAD] step1 start", { title, content, hasFile: !!file });
+    const key = file ? await uploadToS3(file) : null;
+    console.log("[UPLOAD] step2 s3 ok", key);
 
-    try {
-      const key = file? await uploadToS3(file):null
-      console.log('s3 ok!',key)
-      
-      const created = await add({title, content,fileKeys:key? [key]:[]})
-      console.log('db ok!',created)
-    } catch (error) {
-      console.error('uploaded fail',error)
-    }
-
+    const created = await add({ title, content, fileKeys: key ? [key] : [] });
+    console.log("[UPLOAD] step3 db ok", created);
+  } catch (e) {
+    console.error("[UPLOAD] failed", e);
   }
+};
 
   return (
     <section>
@@ -42,11 +41,11 @@ const UserDashboard = () => {
       </div>
       <div className="inner">
         {open && (
-
           <UploadForm
-          onUploaded={handleUploaded} 
-          open={open} 
-           onClose={() => setOpen(false)} />
+            onUploaded={handleUploaded} 
+            open={open}
+            onClose={() => setOpen(false)}
+          />
         )}
         <FileList />
       </div>

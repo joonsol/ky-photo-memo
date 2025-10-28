@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import "./style/UploadForm.scss"
 const UploadForm = ({
-  onUploaded,
+ onUploaded,      
   initail,
   onClose
 }) => {
@@ -31,43 +31,40 @@ const UploadForm = ({
 
   }
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    console.log("[SUBMIT] start", { form, uploading, hasOnUploaded: !!onUploaded }); // ★ 항상 제일 먼저
 
     if (!form.title.trim()) {
-      console.warn('title empty')
-      alert('제목을 입력하세요')
-
-      return
+      console.warn("[SUBMIT] title empty");
+      alert("제목을 입력하세요.");
+      return;
     }
-    if (uploading) return
+    if (uploading) return;
 
     try {
-      setUploading(true)
+      setUploading(true);
 
+      console.log("[SUBMIT] call onUploaded");
       await onUploaded?.({
         title: form.title.trim(),
         content: form.content.trim(),
-        file: form.file
-      })
+        file: form.file,
+      });
+      console.log("[SUBMIT] onUploaded done");
 
-      if (form.preview) URL.revokeObjectURL(form.preview)
+      if (form.preview) URL.revokeObjectURL(form.preview);
+      setForm({ title: "", content: "", file: null, preview: null });
 
-      setForm({
-        title: "",
-        content: "",
-        file: null,
-        preview: null
-      })
-
-      onClose?.()
-    } catch (error) {
-
-      console.error('submit error', error)
+      // onClose는 동기 콜백일 가능성이 높음 → await 제거
+      onClose?.();
+      console.log("[SUBMIT] close modal");
+    } catch (err) {
+      console.error("[SUBMIT] error", err);
+      alert(err?.message || "업로드 실패");
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-
-  }
+  };
   return (
     <section className='am-backdrop'>
       <form
@@ -122,7 +119,7 @@ const UploadForm = ({
           </div>
         </div>
         <div className="actions">
-          <button className="btn ghost">취소</button>
+          <button className="btn ghost" onClick={onClose}>취소</button>
           <button
             type='submit'
             disabled={uploading}
