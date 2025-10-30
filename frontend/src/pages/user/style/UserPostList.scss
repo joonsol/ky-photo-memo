@@ -1,0 +1,15 @@
+.post-list{
+  display: flex;
+  // flex-wrap: wrap;
+  flex-direction: column;
+  max-width: 80rem;
+  margin:0 auto 0;
+  gap: 1rem;
+  >.inner{
+    flex: 1;
+    // width: 32%;
+    cursor: pointer;
+    margin: 0;
+
+  }
+}

@@ -1,0 +1,36 @@
+.post-card {
+
+  .file-card__head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .file-card__title{
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      span {
+        display: inline-block;
+      }
+      h3 {
+        margin-left: 2rem;
+
+      }
+    }
+  }
+  .file-card__content{
+    background-color: var(--surface);
+    border-radius: var(--radius-s);
+    text-align: left;
+    margin: 2rem;
+    padding: 2rem 2rem 2rem 4rem;
+  }
+  .image-wrap{
+    text-align: center;
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin: 2rem ;
+  }
+}
