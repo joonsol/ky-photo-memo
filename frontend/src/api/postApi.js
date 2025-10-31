@@ -1,28 +1,5 @@
+import { toKeyArray } from "../util/toKeyArray";
 import api from "./client";
-
-const PUBLIC_BASE = import.meta.env.VITE_S3_PUBLIC_BASE || "";
-
-function urlToKey(u) {
-  if (!u) return "";
-  const s = String(u);
-  if (!/^https?:\/\//i.test(s)) return s; // 이미 key
-  if (PUBLIC_BASE) {
-    const base = PUBLIC_BASE.replace(/\/+$/, "");
-    return s.startsWith(base + "/") ? s.slice(base.length + 1) : s;
-  }
-  try {
-    const url = new URL(s);
-    return url.pathname.replace(/^\/+/, ""); // /uploads/.. → uploads/..
-  } catch {
-    return s; // fallback
-  }
-}
-
-function toKeyArray(val) {
-  if (!val) return [];
-  const arr = Array.isArray(val) ? val : [val];
-  return arr.map(urlToKey).filter(Boolean);
-}
 
 export const uploadToS3 = async (file, opts = {}) => {
   const {
@@ -50,18 +27,38 @@ export const createPost = async ({ title, content, fileKeys }) => {
     content,
     fileUrl: fileKeys,
   });
-  
+
+  return data;
+};
+export const fetchMyPosts = async () => {
+  const { data } = await api.get("/api/posts/my");
+
+  return Array.isArray(data) ? data : [];
+};
+export const fetchAllPosts = async () => {
+  const { data } = await api.get("/api/posts");
+
+  return Array.isArray(data) ? data : [];
+};
+
+export const fetchPostById = async (id) => {
+  const { data } = await api.get(`/api/posts/${id}`);
   return data;
 };
 
+export const updatedPost = async (id,patch) => {
 
-export const fetchMyPosts= async()=>{
-    const {data} = await api.get('/api/posts/my')
+  const payload = {...patch}
 
-    return Array.isArray(data)? data:[]
-}
-export const fetchAllPosts= async()=>{
-    const {data} = await api.get('/api/posts')
+  if(patch.fileUrl !==undefined){
+    payload.fileUrl = toKeyArray(payload.fileUrl)
+  }
+  const { data } = await api.put(`/api/posts/${id}`,payload);
 
-    return Array.isArray(data)? data:[]
+  return data;
+};
+
+export const deletePost = async(id)=>{
+  const {data}= await api.delete(`/api/posts/${id}`)
+  return data
 }
