@@ -11,11 +11,13 @@ const userSchema=new mongoose.Schema(
             required:true,
             lowercase:true,
             trim:true,
-            match:[EMAIL_REGEX,"유효한 이메일"]
+            match:[EMAIL_REGEX,"유효한 이메일"],
+            unique:true
         },
         passwordHash:{
             type:String,
-            required:true
+            required:true,
+            select:false
         },
         displayName:{
             type:String,
@@ -28,15 +30,14 @@ const userSchema=new mongoose.Schema(
             default:"user",
             index:true
         },
-        isActive:{
-            type:Boolean,
-            default:true
+        // isActive:{
+        //     type:Boolean,
+        //     default:true
+        // },
+        lastLoginAttempt:{
+            type:Date
         },
-        isLoggined:{
-            type:Boolean,
-            default:false
-        },
-        loginAttempts:{
+        failedLoginAttempts:{
             type:Number,
             default:0
         }
@@ -50,6 +51,10 @@ userSchema.methods.comparePassword=function(plain){
     return bcrypt.compare(plain,this.passwordHash)
 }
 
+userSchema.method.setPassword= async function(plain){
+    const salt=await bcrypt.genSalt(10)
+    this.passwordHash= await bcrypt.hash(plain,salt)
+}
 
 
 userSchema.methods.toSafeJSON=function(){
@@ -57,6 +62,12 @@ userSchema.methods.toSafeJSON=function(){
     delete obj.passwordHash
     return obj
 }
-userSchema.index({email:1},{unique:true})
+userSchema.set('toJSON',{
+    versionKey:false,
+    transform:(_doc,ret)=>{
+        delete ret.passwordHash
+        return ret
+    }
+})
 
 module.exports = mongoose.model('User',userSchema)
