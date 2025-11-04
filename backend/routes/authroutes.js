@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
 
         // 3 사용자 없음
         if (!user) {
-            return res.status(400).json({
+            return res.status(401).json({
                 ...invalidMsg,
                 loginAttempts: null,
                 remainingAttempts: null,
