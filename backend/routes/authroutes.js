@@ -103,7 +103,7 @@ router.post("/login", async (req, res) => {
         }
         // 4 잠금 해제 로직
 
-        if(!user.isActive&&(user.failedLoginAttempts??0)>=LOCK_MAX){
+        if(!user.isActive){
             const last = user.lastLoginAttempt? user.lastLoginAttempt.getTime():0
             const passed = Date.now() -last;
             if(passed>LOCKOUT_DURATION_MS){
