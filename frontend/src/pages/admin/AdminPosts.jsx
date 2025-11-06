@@ -1,35 +1,30 @@
-import React ,{useEffect,useState}from 'react'
-import {fetchAdminPosts, patchAdminPost} from '../../api/adminApi'
-import AdminFilter from '../../components/admin/AdminFilter'
-import AdminPostsList from '../../components/admin/AdminPostsList'
+import React, { useEffect, useMemo, useState } from "react";
+import { fetchAdminPosts, patchAdminPost } from "../../api/adminApi";
+import AdminPostList from "../../components/admin/AdminPostsList";
+import AdminFilter from "../../components/admin/AdminFilter";
 const AdminPosts = () => {
-  const [list, setList]=useState([])
+  const [list, setList] = useState([]);
+  const [query, setQuery] = useState({
+    page: 1,
+    size: 10,
+    status: "",
+    q: "",
+    user: "",
+  });
 
-  const [query, setQuery]=useState({
-    page:1,
-    size:10,
-    status:'',
-    q:'',
-    user:''
-  })
+  useEffect(() => {
+    (async () => {
+      const items = await fetchAdminPosts(query);
+      setList(items);
+    })();
+  }, [query]);
 
-
-  useEffect(()=>{
-    (async()=>{
-      try {
-        const items=await fetchAdminPosts(query)
-        setList(items)
-      } catch (error) {
-        console.error('게시글 불러오기 실패', error)
-      }
-    })
-  },[query])
   return (
     <div>
       <AdminFilter/>
-      <AdminPostsList items={list}/>
+      <AdminPostList  items={list} />
     </div>
-  )
-}
+  );
+};
 
-export default AdminPosts
+export default AdminPosts;

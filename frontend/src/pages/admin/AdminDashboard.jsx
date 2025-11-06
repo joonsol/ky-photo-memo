@@ -16,7 +16,7 @@ const AdminDashboard = () => {
       } catch (error) {
         console.error('관리자 통계 불러오기 실패',error)
       }
-    })
+    })()
 
   },[])
 
