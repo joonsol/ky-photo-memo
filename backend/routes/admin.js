@@ -29,6 +29,9 @@ router.get(
  async (req, res) => {
   const { page = 1, size = 20, status, q } = req.query;
 
+  status = String(status).trim().toLowerCase();
+  q = String(q).trim();
+
   const filter = {};
   if (status) filter.status = status;
   if (q) filter.title = { $regex: q, $options: "i" };
@@ -95,35 +98,35 @@ router.patch(
  }
 );
 
-router.patch('/users/:id',
-    authenticateToken,
-    requireRole('admin'),
-    audit({
-        resource:'user',
-        action:'update',
-        getTargetId:(req)=>req.params.id
-    }),
-    async(req,res)=>{
-        const {role, isActive, resetRock}= req.body
+router.patch(
+ "/users/:id",
+ authenticateToken,
+ requireRole("admin"),
+ audit({
+  resource: "user",
+  action: "update",
+  getTargetId: (req) => req.params.id,
+ }),
+ async (req, res) => {
+  const { role, isActive, resetRock } = req.body;
 
-        const updates={}
+  const updates = {};
 
-        if(role) updates.role= role
+  if (role) updates.role = role;
 
-        if(typeof isActive=='boolean') updates.isActive = isActive
+  if (typeof isActive == "boolean") updates.isActive = isActive;
 
-        if(resetRock){
-            updates.failedLoginAttempts=0
-            updates.lastLoginAttempt=null
-        }
-        const user = await User.findByIdAndUpdate(req.params.id,updates,{
-            new:true
-        })
+  if (resetRock) {
+   updates.failedLoginAttempts = 0;
+   updates.lastLoginAttempt = null;
+  }
+  const user = await User.findByIdAndUpdate(req.params.id, updates, {
+   new: true,
+  });
 
-        if(!user) return res.status(404).json({message:'사용자 없음'})
-        res.json(user)
-    }
-)
-
+  if (!user) return res.status(404).json({ message: "사용자 없음" });
+  res.json(user);
+ }
+);
 
 module.exports = router;

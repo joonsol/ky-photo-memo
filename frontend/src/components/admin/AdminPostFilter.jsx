@@ -35,7 +35,7 @@ const AdminPostFilter = ({ value, onChange }) => {
      })
     }
    >
-    <option value="">전체</option>
+    {/* <option value="">전체</option> */}
     <option value="pending">대기</option>
     <option value="approved">승인</option>
     <option value="rejected">거절</option>
