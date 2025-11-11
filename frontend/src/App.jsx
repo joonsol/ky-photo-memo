@@ -34,6 +34,7 @@ function App() {
   const showHeader = isAuthed && !hideOn.has(location.pathname);
 
   const handleAuthed = async ({ user, token }) => {
+    console.log("카카오 로그인 완료:", user, token);
     try {
       setUser(user);
       setToken(token ?? null);
