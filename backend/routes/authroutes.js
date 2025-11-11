@@ -2,11 +2,14 @@ const express = require("express")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+const passport= require('../config/passport')
 const User = require("../models/User")
 const { authenticateToken } = require('../middlewares/auth'); // ✅ 변경됨: auth → authenticateToken 명시적 미들웨어 사용
 const LOCK_MAX = 5
 const LOCKOUT_DURATION_MS = 10*60*1000
 
+const FRONT_ORIGIN=process.env.FRONT_ORIGIN
+const JWT_SECRET=process.env.JWT_SECRET
 
 function makeToken(user) {
     return jwt.sign(
@@ -214,6 +217,24 @@ router.post("/login", async (req, res) => {
     }
 })
 
+router.get('/kakao',passport.authenticate('kakao'))
+
+router.get('/kakao/callback',(req, res,next)=>{
+    passport.authenticate('kakao',{
+        session:false
+    },async(err, user, info)=>{
+        if(err){
+            console.error('kakao error',err)
+            return res.redirect(`${FRONT_ORIGIN}/admin/login?error=kakao`)
+        }
+        if(!user){
+
+        }
+    })
+})
+
+
+
 router.use(authenticateToken)
 
 
@@ -230,6 +251,8 @@ router.get("/me", async (req, res) => {
         res.status(401).json({ message: "조회 실패", error: error.message })
     }
 })
+
+
 
 router.get("/users", async (req, res) => {
     try {
