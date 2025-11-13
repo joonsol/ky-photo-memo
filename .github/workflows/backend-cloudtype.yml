@@ -25,6 +25,5 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_API_KEY }}
-          project: fullstack-website-2506      # Cloudtype 프로젝트명
-          stage: main                 # Cloudtype의 stage 이름
-          yaml: backend-cloudtype.yaml        # ← 요거 중요!
+          project: fullstack-website-2506
+          stage: main
