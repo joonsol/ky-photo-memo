@@ -26,22 +26,19 @@ jobs:
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
 
+      # ✅ 의존성 설치 (frontend 폴더 안에서)
       - name: Install deps
         working-directory: frontend
         run: npm ci
 
+      # ✅ 빌드 (frontend 폴더 안에서)
       - name: Build
         working-directory: frontend
         run: npm run build
 
-      - name: Pull Vercel env
-        run: npx vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }} --cwd frontend
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
+      # ✅ Vercel 배포 (레포 루트에서, 프로젝트 Root Directory = frontend)
       - name: Deploy to Vercel
-        run: npx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --cwd frontend
+        run: npx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --cwd .
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
