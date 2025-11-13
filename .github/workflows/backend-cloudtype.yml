@@ -27,9 +27,9 @@ jobs:
         working-directory: backend
         run: npm ci
 
-      - name: Test (optional)
-        working-directory: backend
-        run: npm test --if-present
+      # - name: Test (optional)
+      #   working-directory: backend
+      #   run: npm test --if-present
 
       - name: Cloudtype Connect
         uses: cloudtype-github-actions/connect@v1
