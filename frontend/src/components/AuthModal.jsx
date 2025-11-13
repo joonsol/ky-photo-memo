@@ -26,7 +26,7 @@ const AuthModal = ({
 
 
   const handleKakaoLogin=()=>{
-    window.location.href=`${BASE_URL}api/auth/kakao`
+    window.location.href=`${BASE_URL}/api/auth/kakao`
   }
 
   useEffect(() => {
