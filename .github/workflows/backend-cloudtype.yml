@@ -16,33 +16,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: backend/package-lock.json
-
+      # Node는 빌드 확인용(install)만 필요 → 배포는 Cloudtype에서 함
       - name: Install deps
         working-directory: backend
         run: npm ci
-
-      # - name: Test (optional)
-      #   working-directory: backend
-      #   run: npm test --if-present
-
-      # - name: Cloudtype Connect
-      #   uses: cloudtype-github-actions/connect@v1
-      #   with:
-      #     token: ${{ secrets.CLOUDTYPE_API_KEY }}
-      #     # ghtoken: ${{ secrets.GH_PAT }}   # 필요할 때만 추가
 
       - name: Cloudtype Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_API_KEY }}
-          project: ky-photo-memo           # 🔴 Cloudtype 프로젝트 이름 그대로 넣기
-          stage: production                # Cloudtype에서 stage가 main이면 main으로 변경
-          build: "npm ci"
-          start: "npm start"
-          working-directory: backend
+          project: ky-photo-memo      # Cloudtype 프로젝트명
+          stage: main                 # Cloudtype의 stage 이름
+          yaml: cloudtype.yaml        # ← 요거 중요!
