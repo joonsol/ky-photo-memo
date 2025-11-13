@@ -31,11 +31,11 @@ jobs:
       #   working-directory: backend
       #   run: npm test --if-present
 
-      - name: Cloudtype Connect
-        uses: cloudtype-github-actions/connect@v1
-        with:
-          token: ${{ secrets.CLOUDTYPE_API_KEY }}
-          # ghtoken: ${{ secrets.GH_PAT }}   # 필요할 때만 추가
+      # - name: Cloudtype Connect
+      #   uses: cloudtype-github-actions/connect@v1
+      #   with:
+      #     token: ${{ secrets.CLOUDTYPE_API_KEY }}
+      #     # ghtoken: ${{ secrets.GH_PAT }}   # 필요할 때만 추가
 
       - name: Cloudtype Deploy
         uses: cloudtype-github-actions/deploy@v1
